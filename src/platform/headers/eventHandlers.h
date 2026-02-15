@@ -3,7 +3,7 @@
 #include "../../headers/bool.h"
 
 typedef struct _MouseResetEvent { 
-    MOUSE_EVENT_RECORD existing; BOOL assigned; 
+    MOUSE_EVENT_RECORD existing; Bool assigned; 
 } MouseResetEvent;
 
 void handleMouseEvent(

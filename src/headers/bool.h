@@ -1,4 +1,4 @@
 #pragma once
-typedef unsigned char BOOL;
+typedef unsigned char Bool;
 #define true 1
 #define false 0

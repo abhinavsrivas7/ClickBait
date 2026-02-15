@@ -9,4 +9,4 @@ typedef struct _Vertex {
 } Vertex;
 
 
-BOOL validateInputVertex(const Vertex *vertex);
+Bool validateInputVertex(const Vertex *vertex);
