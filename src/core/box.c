@@ -1,34 +1,26 @@
 #include "headers/box.h"
 
-Box* boxConstructor(Vertex vertices[4], Color sideColors[4])
+Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4])
 {
-    Box *box = malloc(sizeof(Box));
-    
-    if(box == NULL)
-    {
-        return NULL;
-    }
-
     for(int i = 0; i < 4; i++)
     {
         if(!validateInputVertex(&vertices[i]))
         {
-            free(box);
-            return NULL;
+            return false;
         }
 
         box->Vertices[i] = vertices[i];
         box->SideColors[i] = sideColors[i];
     }
 
-    return box;
+    return true;
 }
 
 ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
 {
-    Box *box = boxConstructor(vertices, sideColors);
+    Box box = {0};
 
-    if(box == NULL)
+    if(!boxConstructor(&box, vertices, sideColors))
     {
         return NULL;
     }
@@ -37,7 +29,6 @@ ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
 
     if(containerBox == NULL)
     {
-        free(box);
         return NULL;
     }
 
@@ -49,9 +40,9 @@ ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
 ListBox* listBoxConstructor(
     Vertex vertices[4], Color sideColors[4], unsigned int childrenCount)
 {
-    Box *box = boxConstructor(vertices, sideColors);
+    Box box = {0};
 
-    if(box == NULL)
+    if(!boxConstructor(&box, vertices, sideColors))
     {
         return NULL;
     }
@@ -60,7 +51,6 @@ ListBox* listBoxConstructor(
 
     if(listBox == NULL)
     {
-        free(box);
         return NULL;
     }
 
@@ -74,5 +64,23 @@ ListBox* listBoxConstructor(
 
     return listBox;
 }
-void containerBoxDestructor(ContainerBox *containerBox);
-void listBoxDestructor(ListBox *containerBox);
+
+void containerBoxDestructor(ContainerBox *containerBox)
+{
+    if(containerBox == NULL)
+    {
+        return;
+    }
+
+    for(int i = 0; i < containerBox->childrenCount; i++)
+    {
+        containerBoxDestructor(containerBox->children[i]);
+    }
+
+    free(containerBox);
+}
+
+void listBoxDestructor(ListBox *listBox)
+{
+    free(listBox);
+}

@@ -7,18 +7,18 @@ typedef struct _Box { Vertex Vertices[4]; Color SideColors[4]; } Box;
 typedef struct _ContainerBox ContainerBox;
 
 struct _ContainerBox { 
-    Box *box;
-    ContainerBox *children[MAX_CHILD_CONTAINERS];
+    Box box;
     unsigned int childrenCount;
+    ContainerBox *children[MAX_CHILD_CONTAINERS];
 };
 
 typedef struct _ListBox {
-    Box *box;
-    Box *children;
+    Box box;
     unsigned int childrenCount;
+    Box children[];
 } ListBox;
 
-Box* boxConstructor(Vertex vertices[4], Color sideColors[4]);
+Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4]);
 ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4]);
 
 ListBox* listBoxConstructor(
@@ -26,4 +26,5 @@ ListBox* listBoxConstructor(
 );
 
 void containerBoxDestructor(ContainerBox *containerBox);
-void listBoxDestructor(ListBox *containerBox);
+
+void listBoxDestructor(ListBox *listBox);
