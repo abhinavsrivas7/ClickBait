@@ -37,8 +37,25 @@ ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
     return containerBox;
 }
 
-ListBox* listBoxConstructor(
-    Vertex vertices[4], Color sideColors[4], unsigned int childrenCount)
+Bool addChild(ContainerBox* containerBox, Vertex vertices[4], Color sideColors[4])
+{
+    if(containerBox->childrenCount >= MAX_CHILD_CONTAINERS)
+    {
+        return false;
+    }
+
+    ContainerBox* child = containerBoxConstructor(vertices, sideColors);
+
+    if(child == NULL)
+    {
+        return false;
+    }
+
+    containerBox->children[containerBox->childrenCount++] = child;
+    return true;
+}
+
+ListBox* listBoxConstructor(Vertex vertices[4], Color sideColors[4], unsigned int childrenCount)
 {
     Box box = {0};
 

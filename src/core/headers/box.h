@@ -19,12 +19,13 @@ typedef struct _ListBox {
 } ListBox;
 
 Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4]);
+
 ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4]);
+Bool addChild(ContainerBox* containerBox, Vertex vertices[4], Color sideColors[4]);
 
 ListBox* listBoxConstructor(
     Vertex vertices[4], Color sideColors[4], unsigned int childrenCount
 );
 
 void containerBoxDestructor(ContainerBox *containerBox);
-
 void listBoxDestructor(ListBox *listBox);
