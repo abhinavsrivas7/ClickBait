@@ -1,8 +1,13 @@
 #include "headers/box.h"
 
+Bool validateInputVertex(const Vertex *vertex)
+{
+    return vertex->X <= MAX_INPUT_COORDINATE && vertex->Y <= MAX_INPUT_COORDINATE;
+}
+
 Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4])
 {
-    for(int i = 0; i < 4; i++)
+    for(Bool i = 0; i < 4; i++)
     {
         if(!validateInputVertex(&vertices[i]))
         {
@@ -55,7 +60,7 @@ Bool addChild(ContainerBox* containerBox, Vertex vertices[4], Color sideColors[4
     return true;
 }
 
-ListBox* listBoxConstructor(Vertex vertices[4], Color sideColors[4], unsigned int childrenCount)
+ListBox* listBoxConstructor(Vertex vertices[4], Color sideColors[4], UINT childrenCount)
 {
     Box box = {0};
 
@@ -74,7 +79,7 @@ ListBox* listBoxConstructor(Vertex vertices[4], Color sideColors[4], unsigned in
     listBox->box = box;
     listBox->childrenCount = childrenCount;
 
-    for(int i = 0; i < childrenCount; i++)
+    for(UINT i = 0; i < childrenCount; i++)
     {
         listBox->children[i] = (Box){0};
     }
@@ -89,7 +94,7 @@ void containerBoxDestructor(ContainerBox *containerBox)
         return;
     }
 
-    for(int i = 0; i < containerBox->childrenCount; i++)
+    for(Bool i = 0; i < containerBox->childrenCount; i++)
     {
         containerBoxDestructor(containerBox->children[i]);
     }

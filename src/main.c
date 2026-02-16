@@ -1,37 +1,21 @@
 #include "platform/headers/setup.h"
 #include "platform/headers/eventHandlers.h"
+#include "core/headers/renderer.h"
 
 int main()
 {
-    DWORD read;
-    INPUT_RECORD rec;
     STD std = getHandles();
-    MouseResetEvent mouseEventCallback = { .assigned = false };
     COORD screenSize = prepare(&std);
-    printf("Window sizekkk: (%d,%d)\n", screenSize.X, screenSize.Y);
+    Box box = {0};
+    UINT a = 10, b = 20;
+    Color sideColors[4] = {RED, GREEN, BLUE, GREEN};
+    Vertex vertices[4] = {{.X=a, .Y=a}, {.X=b, .Y=a}, {.X=b, .Y=b}, {.X=a, .Y=b}};
 
-    while(true)
+    if(!boxConstructor(&box, vertices, sideColors))
     {
-        ReadConsoleInputW(std.In, &rec, 1, &read); 
-
-        switch(rec.EventType)
-        {
-            case KEY_EVENT: 
-            {
-                KEY_EVENT_RECORD keyEvent = rec.Event.KeyEvent;
-                if(keyEvent.bKeyDown && keyEvent.uChar.AsciiChar == QUIT_COMMAND) 
-                {
-                    return cleanup(&std, &screenSize, &mouseEventCallback);
-                }
-                handleKeyEvent(&keyEvent);
-                break;
-            }
-            case MOUSE_EVENT: 
-                handleMouseEvent(std.Out, &rec.Event.MouseEvent, &mouseEventCallback);
-                break;
-            case WINDOW_BUFFER_SIZE_EVENT: 
-                handleWindowResizeEvent(&rec.Event.WindowBufferSizeEvent, &screenSize);
-                break;
-        }
+        return 69;
     }
+
+    renderBox(&box, std.Out, &screenSize);
+    return 0;
 }
