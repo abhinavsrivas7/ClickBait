@@ -1,5 +1,4 @@
-// #include "platform/headers/setup.h"
-// #include "platform/headers/eventHandlers.h"
+// #include "examples.h"
 
 // int experiment()
 // {
@@ -21,7 +20,8 @@
 //                 KEY_EVENT_RECORD keyEvent = rec.Event.KeyEvent;
 //                 if(keyEvent.bKeyDown && keyEvent.uChar.AsciiChar == QUIT_COMMAND) 
 //                 {
-//                     return cleanup(&std, &screenSize, &mouseEventCallback);
+//                     cleanup(&std, &screenSize, &mouseEventCallback);
+//                     return 0;
 //                 }
 //                 handleKeyEvent(&keyEvent);
 //                 break;

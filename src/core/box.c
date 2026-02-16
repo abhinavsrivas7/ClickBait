@@ -1,11 +1,13 @@
 #include "headers/box.h"
 
-Bool validateInputVertex(const Vertex *vertex)
+Bool validateInputVertex(const COORD *vertex)
 {
-    return vertex->X <= MAX_INPUT_COORDINATE && vertex->Y <= MAX_INPUT_COORDINATE;
+    return vertex->X >= 0 && vertex->Y >= 0
+        && vertex->X <= MAX_INPUT_COORDINATE 
+        && vertex->Y <= MAX_INPUT_COORDINATE;
 }
 
-Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4])
+Bool boxConstructor(Box *box, COORD vertices[static 4], Color sideColors[static 4])
 {
     for(Bool i = 0; i < 4; i++)
     {
@@ -21,7 +23,7 @@ Bool boxConstructor(Box *box, Vertex vertices[4], Color sideColors[4])
     return true;
 }
 
-ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
+ContainerBox* containerBoxConstructor(COORD vertices[static 4], Color sideColors[static 4])
 {
     Box box = {0};
 
@@ -42,7 +44,7 @@ ContainerBox* containerBoxConstructor(Vertex vertices[4], Color sideColors[4])
     return containerBox;
 }
 
-Bool addChild(ContainerBox* containerBox, Vertex vertices[4], Color sideColors[4])
+Bool addChild(ContainerBox* containerBox, COORD vertices[static 4], Color sideColors[static 4])
 {
     if(containerBox->childrenCount >= MAX_CHILD_CONTAINERS)
     {
@@ -60,7 +62,8 @@ Bool addChild(ContainerBox* containerBox, Vertex vertices[4], Color sideColors[4
     return true;
 }
 
-ListBox* listBoxConstructor(Vertex vertices[4], Color sideColors[4], UINT childrenCount)
+ListBox* listBoxConstructor(
+    COORD vertices[static 4], Color sideColors[static 4], UINT childrenCount)
 {
     Box box = {0};
 

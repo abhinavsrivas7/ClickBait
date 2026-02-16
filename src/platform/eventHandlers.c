@@ -1,32 +1,18 @@
 #include "headers/eventHandlers.h"
 #include "headers/graphics.h"
 
-void resetAndReAssign(const HANDLE stdOut, MOUSE_EVENT_RECORD *curr, MouseResetEvent *prev)
-{
-    if(prev->assigned)
-    {
-        resetCell(stdOut, &prev->existing.dwMousePosition);
-    }
-
-    prev->existing = *curr;
-    prev->assigned = true;
-}
-
-void handleMouseEvent(
-    const HANDLE stdOut, MOUSE_EVENT_RECORD *event, MouseResetEvent *existing)
+void handleMouseEvent(MOUSE_EVENT_RECORD *event)
 {
     COORD position = event->dwMousePosition;
     
     if(event->dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
     {
-        resetAndReAssign(stdOut, event, existing);
-        setCellBackground(stdOut, &position, RED);
+        return;
     }
 
     if(event->dwButtonState & RIGHTMOST_BUTTON_PRESSED)
     {
-        resetAndReAssign(stdOut, event, existing);
-        setCellBackground(stdOut, &position, GREEN);
+        return;
     }
 
     if(event->dwEventFlags == MOUSE_WHEELED)
@@ -38,14 +24,18 @@ void handleMouseEvent(
 
 void handleWindowResizeEvent(const WINDOW_BUFFER_SIZE_RECORD *event, COORD *screenSize)
 {
-    COORD size = event->dwSize;
-    printf("Window resized to (%d, %d)\n", size.X, size.Y);
-    screenSize->X = size.X;
-    screenSize->Y = size.Y;
+    screenSize->X = event->dwSize.X;
+    screenSize->Y = event->dwSize.Y;
 }
 
-
-void handleKeyEvent(KEY_EVENT_RECORD *event)
+void handleKeyEvent(const KEY_EVENT_RECORD *event)
 {
     printf("%c", event->uChar.AsciiChar);
+}
+
+Bool isExitEvent(const INPUT_RECORD *event)
+{
+    return event->EventType == KEY_EVENT
+        && event->Event.KeyEvent.bKeyDown 
+        && event->Event.KeyEvent.uChar.AsciiChar == QUIT_COMMAND;
 }

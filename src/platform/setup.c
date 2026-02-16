@@ -18,28 +18,27 @@ COORD prepare(const STD *std)
     inMode &= ~(ENABLE_QUICK_EDIT_MODE | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
     SetConsoleMode(std->In, inMode);
     SetConsoleMode(std->Out, std->OutMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(std->Out, &cursorInfo);
+    cursorInfo.bVisible = false;                
+    SetConsoleCursorInfo(std->Out, &cursorInfo);
     CONSOLE_SCREEN_BUFFER_INFO info;
     GetConsoleScreenBufferInfo(std->Out, &info);
-    
-    COORD screenSize = {
+    clearScreen();
+
+    return (COORD) {
         .X = info.srWindow.Right - info.srWindow.Left + 1, 
         .Y = info.srWindow.Bottom - info.srWindow.Top + 1
     };
-
-    clearScreen(std->Out, &screenSize);
-    return screenSize;
 }
 
-int cleanup(const STD *std, const COORD *screenSize, MouseResetEvent *residueEvent)
+void cleanup(const STD *std)
 {
     SetConsoleMode(std->In, std->InMode);
     SetConsoleMode(std->Out, std->OutMode);
-
-    if(residueEvent->assigned)
-    {
-        resetCell(std->Out, &residueEvent->existing.dwMousePosition);
-    }
-
-    clearScreen(std->Out, screenSize);
-    return 0;
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(std->Out, &cursorInfo);
+    cursorInfo.bVisible = true;                
+    SetConsoleCursorInfo(std->Out, &cursorInfo);
+    clearScreen();
 }

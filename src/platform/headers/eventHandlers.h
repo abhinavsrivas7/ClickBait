@@ -1,15 +1,7 @@
 #pragma once
 #include "include.h"
-#include "../../headers/bool.h"
 
-typedef struct _MouseResetEvent { 
-    MOUSE_EVENT_RECORD existing; Bool assigned; 
-} MouseResetEvent;
-
-void handleMouseEvent(
-    const HANDLE stdOut, MOUSE_EVENT_RECORD *event, MouseResetEvent *existing
-);
-
+void handleMouseEvent(MOUSE_EVENT_RECORD *event);
 void handleWindowResizeEvent(const WINDOW_BUFFER_SIZE_RECORD *event, COORD *screenSize);
-
-void handleKeyEvent(KEY_EVENT_RECORD *event);
+void handleKeyEvent(const KEY_EVENT_RECORD *event);
+Bool isExitEvent(const INPUT_RECORD *event); 
