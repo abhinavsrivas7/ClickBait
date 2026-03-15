@@ -9,7 +9,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
 typedef unsigned char Bool;
-
-static inline void CbFlush() { fflush(stdout); }

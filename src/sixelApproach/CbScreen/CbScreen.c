@@ -5,11 +5,12 @@
 #define EVENT_BUFFER_SIZE 256
 #define RESPONSE_BUFFER_SIZE 1024
 
-void CbScreen_Update(CbScreen *screen, HANDLE stdIn)
+void CbScreen_Update(CbScreen *screen, HANDLE stdIn, HANDLE stdOut)
 {
     FlushConsoleInputBuffer(stdIn);
-    printf("\033[14t\033[18t");
-    CbFlush();
+    char command[] = "\033[14t\033[18t";
+    CbDrawBuffer_SetBufferMode(stdOut, ANSI);
+    CbDrawBuffer_ImmediateFlush(stdOut, command, sizeof(command) - 1);
     WCHAR responseBuffer[RESPONSE_BUFFER_SIZE] = {0}; 
     int responseBufferIndex = 0;
     INPUT_RECORD eventBuffer[EVENT_BUFFER_SIZE];

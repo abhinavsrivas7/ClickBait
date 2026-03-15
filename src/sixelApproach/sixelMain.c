@@ -1,40 +1,36 @@
 #include "sixel.h"
 #define CLICKBAIT 46
 #define CIRCLE_RADIUS 100
-#define BOX_SIDE 200
+#define BOX_SIDE 500
 #define BOX_HALF_SIDE (BOX_SIDE / 2)
 int leftClickCounter = 0, rightClickCounter = 0;
 Bool filledState = true;
 
-void IncrementCounter(Bool isLeft, Bool isRight)
+void IncrementCounter(const CbEnvironment *environment, Bool isLeft, Bool isRight)
 {
     if (isLeft)  { ++leftClickCounter;  }
     if (isRight) { ++rightClickCounter; }
 
-    CbRenderer_NavigateToCell((COORD) { .X = 1, .Y = 2 });
-    printf("Left Click Counter Value: %d.\n", leftClickCounter);
-    printf("Right Click Counter Value: %d.\n", rightClickCounter);
-    printf("Click inside the box to increment..\n");
+    CbRenderer_NavigateToCell(environment->Out, (COORD) { .X = 1, .Y = 2 });
+    CbDrawBuffer_Draw(environment->Out, "Left Click Counter Value: %d.\n", leftClickCounter);
+    CbDrawBuffer_Draw(environment->Out, "Right Click Counter Value: %d.\n", rightClickCounter);
+    CbDrawBuffer_Draw(environment->Out, "Click inside the box to increment..\n");
 }
 
-Bool IsCbExitEvent(const INPUT_RECORD *event)
+static Bool IsCbExitEvent(const INPUT_RECORD *event)
 {
     return event->EventType == KEY_EVENT
         && event->Event.KeyEvent.bKeyDown 
         && event->Event.KeyEvent.uChar.AsciiChar == QUIT_COMMAND;
 }
 
-void DrawSixelBox(const CbEnvironment *environment, COORD center)
+static void DrawSixelBox(const CbEnvironment *environment, COORD center)
 {
-    COORD offsets = CbRenderer_NavigateToNearestPixel(
-        &environment->Screen, 
-        (COORD) { .X = center.X - BOX_HALF_SIDE, .Y = center.Y - BOX_HALF_SIDE }, 
-        false
-    );
-    
+    COORD start = { .X = center.X - BOX_HALF_SIDE, .Y = center.Y - BOX_HALF_SIDE };
+    COORD offsets = CbRenderer_StartDrawing(environment->Out, &environment->Screen, start);
     SHORT strips = BOX_SIDE / SIXEL_HEIGHT;
-    CbRenderer_SetColor(RED, 1);
-    CbRenderer_SetColor(BLUE, 2);
+    CbRenderer_SetColor(environment->Out, RED, 1);
+    CbRenderer_SetColor(environment->Out, BLUE, 2);
 
     for (SHORT strip = 0; strip <= strips; strip++) 
     {
@@ -44,7 +40,7 @@ void DrawSixelBox(const CbEnvironment *environment, COORD center)
         {
             BYTE column[8] = {0};
             Bool isEdgeColumn = col == 0 || col == (BOX_SIDE - 1);
-            CbRenderer_UseColor(col >= BOX_HALF_SIDE ? 2 : 1);
+            CbRenderer_UseColor(environment->Out, col >= BOX_HALF_SIDE ? 2 : 1);
 
             for(BYTE bit = 0; bit < SIXEL_HEIGHT; bit++)
             {
@@ -64,32 +60,31 @@ void DrawSixelBox(const CbEnvironment *environment, COORD center)
                 }
             }
 
-            CbRenderer_DrawColumn(column);
+            CbRenderer_DrawColumn(environment->Out, column);
         }
 
-        CbRenderer_MoveDownByStrips(1);
-        CbRenderer_MoveRightByColumns(offsets.X);
+        CbRenderer_MoveDownByStrips(environment->Out, 1);
+        CbRenderer_MoveRightByColumns(environment->Out, offsets.X);
     }
 
-    CbRenderer_StopDrawing();
-    CbFlush();
     filledState = !filledState;
     
-    CbRenderer_NavigateToCell(CbScreen_PixelToCell(
+    CbRenderer_NavigateToCell(environment->Out, CbScreen_PixelToCell(
         &environment->Screen, 
         (COORD) { .X = center.X - CLICKBAIT, .Y = center.Y }
     ));
 
-    printf("CLICK-BAIT");
+    CbDrawBuffer_Draw(environment->Out, "CLICK-BAIT");
+    CbRenderer_StopDrawing(environment->Out);
 }
 
-void DrawSixelCircle(const CbEnvironment *environment, COORD center)
-{
-    COORD start = { .X = center.X + CIRCLE_RADIUS, .Y = center.Y };
-    COORD offsets = CbRenderer_NavigateToNearestPixel(&environment->Screen, start, false);
-}
+// static void DrawSixelCircle(const CbEnvironment *environment, COORD center)
+// {
+//     COORD start = { .X = center.X + CIRCLE_RADIUS, .Y = center.Y };
+//     COORD offsets = CbRenderer_StartDrawing(environment->Out, &environment->Screen, start);
+// }
 
-void HandleMouseEvent(
+static void HandleMouseEvent(
     const MOUSE_EVENT_RECORD *mouseEvent, 
     const CbEnvironment *environment,
     const COORD center
@@ -120,8 +115,8 @@ void HandleMouseEvent(
     
     if(isInBox && (leftButtonPressed || rightButtonPressed))
     {
-        CbEnvironment_ClearScreen();
-        IncrementCounter(leftButtonPressed, rightButtonPressed);
+        CbEnvironment_ClearScreen(environment->Out);
+        IncrementCounter(environment, leftButtonPressed, rightButtonPressed);
         DrawSixelBox(environment, center);
     }
 }
@@ -131,15 +126,9 @@ int CbInit()
     DWORD read;
     INPUT_RECORD event;
     CbEnvironment *environment = CbEnvironment_Prepare();
-
-    if(environment == NULL)
-    {
-        return 69;
-    }
-
     COORD center = CbScreen_FindCenter(&environment->Screen);
     DrawSixelBox(environment, center);
-    IncrementCounter(false, false);
+    IncrementCounter(environment, false, false);
 
     while(true)
     {
@@ -152,11 +141,11 @@ int CbInit()
         }
         else if(event.EventType == WINDOW_BUFFER_SIZE_EVENT)
         {
-            CbEnvironment_ClearScreen();
-            CbScreen_Update(&environment->Screen, environment->In);
+            CbEnvironment_ClearScreen(environment->Out);
+            CbScreen_Update(&environment->Screen, environment->In, environment->Out);
             center = CbScreen_FindCenter(&environment->Screen);
             DrawSixelBox(environment, center);
-            IncrementCounter(false, false);
+            IncrementCounter(environment, false, false);
         }
         else if(event.EventType == MOUSE_EVENT)
         {

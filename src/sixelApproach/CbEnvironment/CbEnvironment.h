@@ -1,6 +1,7 @@
 #pragma once
 #include "../common.h"
 #include "../CbScreen/CbScreen.h"
+#include "../CbRenderer/CbDrawBuffer.h"
 
 typedef struct {
     HANDLE In; 
@@ -12,4 +13,4 @@ typedef struct {
 
 CbEnvironment *CbEnvironment_Prepare();
 void CbEnvironment_Cleanup(CbEnvironment *std);
-void CbEnvironment_ClearScreen();
+void CbEnvironment_ClearScreen(HANDLE stdOut);
