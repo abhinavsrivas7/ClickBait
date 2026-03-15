@@ -20,18 +20,14 @@ void renderLine(const COORD vertices[static 2], const Color *color, const COORD 
     SHORT x1 = min(line[0].X, line[1].X), x2 = max(line[0].X, line[1].X);
     SHORT y1 = min(line[0].Y, line[1].Y), y2 = max(line[0].Y, line[1].Y);
     COORD start = { .X = x1, .Y = y1 };
+    Bool isHorizontal = y1 == y2;
     setPosition(&start);
     setColor(color);
-    Bool isHorizontal = y1 == y2;
 
     for (SHORT x = x1; x <= x2; x++) {
         for (SHORT y = y1; y <= y2; y++) {
             paintCell();
-
-            if(!isHorizontal)
-            {
-                moveDown(1);
-            }
+            if(!isHorizontal) moveDown(1);
         }
     }
 }

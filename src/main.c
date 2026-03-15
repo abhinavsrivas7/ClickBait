@@ -1,6 +1,8 @@
-#include "examples/examples.h"
+#include "sixelApproach/sixel.h"
+//#include "cellsApproach/examples/examples.h"
 
 int main()
 {
-    return containerBoxExample();
+    return CbInit();
+    //return listBoxExample();
 }
