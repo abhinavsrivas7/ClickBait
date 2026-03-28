@@ -1,7 +1,9 @@
 #pragma  once
-#ifndef WINDOWS_DEPENDENCIES
 #define  WIN32_LEAN_AND_MEAN
 #define  WINVER        0x0A00
+#ifdef   _WIN32_WINNT
+#undef   _WIN32_WINNT
+#endif
 #define  _WIN32_WINNT  0x0A00
 #define  true          1
 #define  false         0
@@ -10,8 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#define WINDOWS_DEPENDENCIES 0
-#endif
 
 typedef void          *IoHandle;
 typedef unsigned char Bool;
