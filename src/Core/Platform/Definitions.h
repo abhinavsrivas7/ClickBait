@@ -8,6 +8,8 @@
 #define  true          1
 #define  false         0
 #define  QUIT_COMMAND  27
+#define  SIXEL_HEIGHT  6
+#define  SIXEL_OFFSET  63 //2^6 - 1
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,10 +20,7 @@ typedef unsigned char Bool;
 typedef unsigned long Word;
 typedef struct        { short X; short Y; } Point;
 typedef struct        { float X; float Y; } FloatPoint;
-
-typedef struct { 
-    short Top; short Bottom; short Left; short Right; 
-} CbRectangle;
+typedef struct        { Point TopLeft; Point Dimensions; } AABB;
 
 typedef struct { 
     Point Cells; Point Pixels; FloatPoint CellsPerPixel; FloatPoint PixelsPerCell;

@@ -19,10 +19,3 @@ void Color_InitPaletteCache(PaletteCache *that)
         }
     }
 }
-
-Channel Color_GetPaletteIndex(Color color)
-{
-    return (Channel) (
-        (color.R * CHANNEL_SIZE * CHANNEL_SIZE) + (color.G * CHANNEL_SIZE) + color.B
-    );
-}

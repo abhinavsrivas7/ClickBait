@@ -1,6 +1,6 @@
 PROJECT = click-bait
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -O3
 LDFLAGS = -lkernel32 -luser32
 SRC_DIR = src
 BIN_DIR = bin
@@ -21,9 +21,12 @@ $(TARGET): $(OBJS)
 
 $(OBJ_DIR)/%.o:
 	$(CC) $(CFLAGS) -c $(filter %/$(notdir $*).c, $(SRCS)) -o $@
-	
+
 run: $(OBJ_DIR) $(TARGET)
 	./$(TARGET)
 
 clean:
 	@if exist $(BIN_DIR) rd /s /q $(BIN_DIR)
+
+debug: CFLAGS = -Wall -Wextra -g -O0
+debug: all

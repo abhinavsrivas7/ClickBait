@@ -4,7 +4,7 @@
 typedef void (*EventHandler) (Event);
 
 typedef struct {
-    Rectangle    Region;
+    AABB    Region;
     EventTypes   On;
     EventHandler Handler;
 } EventRegistration;

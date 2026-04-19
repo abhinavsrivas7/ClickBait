@@ -1,11 +1,11 @@
 #pragma once
-#include "../CommandBuffer/CommandBuffer.h"
-#include "../Color/Color.h"
+#include "../Buffers/Buffers.h"
 
 typedef struct {
     Platform      Platform;
     CommandBuffer CommandBuffer;
     PaletteCache  PaletteCache;
+    DrawBuffer    DrawBuffer;
 } Context;
 
 Context *Context_Startup();

@@ -7,6 +7,7 @@ Context *Context_Startup()
     Platform_InitForStartup(&that->Platform);
     CommandBuffer_Init(&that->CommandBuffer);
     Color_InitPaletteCache(&that->PaletteCache);
+    DrawBuffer_Init(&that->DrawBuffer);
     return that;
 }
 

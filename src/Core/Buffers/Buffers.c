@@ -1,4 +1,4 @@
-#include "CommandBuffer.h"
+#include "Buffers.h"
 
 static inline size_t GetCapacity(const CommandBuffer *that)
 {
@@ -14,10 +14,15 @@ static inline void CheckCapacityAndFlush(
     }
 }
 
+void DrawBuffer_Init(DrawBuffer *that)
+{
+    memset(that->Frame, UNDEFINED_PIXEL, sizeof(that->Frame));
+}
+
 void CommandBuffer_Init(CommandBuffer *that)
 {
     that->Count = 0;
-    that->Mode = ANSI;
+    that->Mode = COMMAND_BUFFER_MODE_ANSI;
 }
 
 void CommandBuffer_Flush(CommandBuffer *that, const Platform *platform)
@@ -57,17 +62,17 @@ void CommandBuffer_AppendFS(
     CheckCapacityAndFlush(that, platform, COMMAND_BUFFER_FLUSH_THRESHOLD);
 }
 
-void CommandBuffer_SetMode(
-    CommandBuffer *that, const Platform *platform, CommandBufferModes mode)
+void CommandBuffer_SetMode(CommandBuffer *that, const Platform *platform, Bool mode)
 {
-    if(that->Mode == mode) { return; }
-    
-    if(that->Mode == SIXEL) 
+    if(that->Mode == mode || mode > COMMAND_BUFFER_MODE_SIXEL) 
+    { 
+        return; 
+    }
+    if(that->Mode == COMMAND_BUFFER_MODE_SIXEL) 
     {
         CommandBuffer_AppendS(that, platform, CommandAndSize(ExitSixelMode));
     }
-
-    if(mode == SIXEL) 
+    else 
     {
         CommandBuffer_AppendS(that, platform, CommandAndSize(EnterSixelMode));
     }
