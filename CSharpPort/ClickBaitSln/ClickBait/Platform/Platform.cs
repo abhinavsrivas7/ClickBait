@@ -4,8 +4,8 @@
     {
         internal HANDLE In;
         internal HANDLE Out;
-        internal UIntPtr InMode;
-        internal UIntPtr OutMode;
+        internal nuint InMode;
+        internal nuint OutMode;
         internal ScreenSize ScreenSize;
 
         internal void InitForStartup()

@@ -4,7 +4,6 @@ namespace ClickBait.Platform
 {
     internal static class Commands
     {
-        internal const sbyte QuitCommand                           = 27;
         internal const byte Sixel_Height                           = 6;
         internal const byte Sixel_Offset                           = 63; //2^6 - 1
         internal const byte MoveToStripStart                       = (byte) '$';
