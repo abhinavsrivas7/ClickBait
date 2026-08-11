@@ -1,0 +1,10 @@
+INPUT_RECORD
+WriteConsoleA
+GetConsoleCursorInfo
+SetConsoleCursorInfo
+GetNumberOfConsoleInputEvents
+ReadConsoleInputW
+FlushConsoleInputBuffer
+GetStdHandle
+GetConsoleMode
+SetConsoleMode

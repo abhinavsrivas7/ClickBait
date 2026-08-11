@@ -1,2 +1,9 @@
 bin/
 .vscode/
+.vs/
+CSharpPort/ClickBaitSln/ClickBait/obj/
+CSharpPort/ClickBaitSln/ClickBait/bin/
+CSharpPort/ClickBaitSln/Examples/obj/
+CSharpPort/ClickBaitSln/Examples/bin/
+CSharpPort/ClickBaitSln/Examples/*.user
+CSharpPort/ClickBaitSln/Examples/Properties/PublishProfiles/*.user
