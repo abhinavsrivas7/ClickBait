@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace ClickBait.Platform
 {
@@ -18,8 +17,8 @@ namespace ClickBait.Platform
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal readonly Point<short> PixelToCell(Point<short> pixel) => new()
         {
-            X = (short)(MathF.Floor(((float)pixel.X) * CellsPerPixel.X) + _ansiStart),
-            Y = (short)(MathF.Floor(((float)pixel.Y) * CellsPerPixel.Y) + _ansiStart)
+            X = (short)(MathF.Floor(pixel.X * CellsPerPixel.X) + _ansiStart),
+            Y = (short)(MathF.Floor(pixel.Y * CellsPerPixel.Y) + _ansiStart)
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,10 +93,10 @@ namespace ClickBait.Platform
                         }
                     }
 
-                    ReadOnlySpan<char> responseBufferSpan = new(responseBuffer, responseBufferIndex);
+                    ReadOnlySpan<char> response = new(responseBuffer, responseBufferIndex);
                     
-                    if (ExtractSize(responseBufferSpan, "[4;", out var pixels) && 
-                        ExtractSize(responseBufferSpan, "[8;", out var cells))
+                    if (ExtractSize(response, "[4;", out var pixels) && 
+                        ExtractSize(response, "[8;", out var cells))
                     {
                         Pixels = pixels;
                         Cells = cells;
