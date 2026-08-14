@@ -1,4 +1,6 @@
-﻿namespace ClickBait.Platform
+﻿using System.Runtime.CompilerServices;
+
+namespace ClickBait.Platform
 {
     internal unsafe struct Platform
     {
@@ -8,11 +10,19 @@
         internal nuint OutMode;
         internal ScreenSize ScreenSize;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal readonly bool HasEvents(INPUT_RECORD* eventBuffer, uint* eventsRead) =>
+            Event.HasEvents(in this, eventBuffer, eventsRead);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void UpdateScreenSize() => ScreenSize.UpdateScreenSize(in this);
+
         internal void InitForStartup()
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void RestoreForShutdown()
         {
             ChangeIoModes(false);
@@ -24,12 +34,14 @@
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ClearScreen()
         {
             DumpToConsole(Commands.ExitSixelMode());
             DumpToConsole(Commands.ClearScreen());
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SwitchTerminalBuffer(bool isStartup)
         {
             DumpToConsole(Commands.ExitSixelMode());
