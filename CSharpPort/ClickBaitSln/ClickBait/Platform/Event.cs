@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace ClickBait.Platform
 {
@@ -14,12 +15,18 @@ namespace ClickBait.Platform
         EXIT_EVENT                = 7
     };
 
+    [StructLayout(LayoutKind.Explicit)]
+    public struct EventData
+    {
+        [FieldOffset(0)] public Point<short> Position;
+        [FieldOffset(0)] public sbyte Character;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct Event
     {
+        public EventData EventData;
         public EventTypes EventType;
-        public sbyte Character;
-        public Point<short> Position;
-
         private const sbyte  _quitCommand           = 27;
         private const ushort _keyEvent              = 0x0001;
         private const ushort _windowBufferSizeEvent = 0x0004;
@@ -80,14 +87,14 @@ namespace ClickBait.Platform
                 else
                 {
                     EventType = EventTypes.KEY_PRESSED_EVENT;
-                    Character = @event.Event.KeyEvent.uChar.AsciiChar;
+                    EventData.Character = @event.Event.KeyEvent.uChar.AsciiChar;
                     return;
                 }
             }
             if (@event.EventType == _mouseEvent)
             {
-                Position.X = @event.Event.MouseEvent.dwMousePosition.X;
-                Position.Y = @event.Event.MouseEvent.dwMousePosition.Y;
+                EventData.Position.X = @event.Event.MouseEvent.dwMousePosition.X;
+                EventData.Position.Y = @event.Event.MouseEvent.dwMousePosition.Y;
 
                 if ((@event.Event.MouseEvent.dwButtonState & _leftMouseButton) != 0)
                 {

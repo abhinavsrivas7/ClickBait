@@ -1,7 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace ClickBait.Platform
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal unsafe struct Platform
     {
         internal HANDLE In;
