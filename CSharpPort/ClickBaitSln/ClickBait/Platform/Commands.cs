@@ -10,19 +10,19 @@ namespace ClickBait.Platform
         internal const byte MoveDownByOneStrip                       = (byte) '-';
                                                                      
         [MethodImpl(MethodImplOptions.AggressiveInlining)]           
-        internal static ReadOnlySpan<byte> EnterSixelMode()          => "\033Pq\"1;1"u8;
+        internal static ReadOnlySpan<byte> EnterSixelMode()          => "\x1bPq\"1;1"u8;
                                                                      
         [MethodImpl(MethodImplOptions.AggressiveInlining)]           
-        internal static ReadOnlySpan<byte> ExitSixelMode()           => "\033\\"u8;
+        internal static ReadOnlySpan<byte> ExitSixelMode()           => "\x1b\\"u8;
                                                                      
         [MethodImpl(MethodImplOptions.AggressiveInlining)]           
-        internal static ReadOnlySpan<byte> RequestScreenSize()       => "\033[14t\033[18t"u8;
+        internal static ReadOnlySpan<byte> RequestScreenSize()       => "\x1b[14t\x1b[18t"u8;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ReadOnlySpan<byte> SwitchToAlternateBuffer() => "\033[?1049h"u8;
+        internal static ReadOnlySpan<byte> SwitchToAlternateBuffer() => "\x1b[?1049h"u8;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ReadOnlySpan<byte> SwitchToOriginalBuffer()  => "\033[?1049l"u8;
+        internal static ReadOnlySpan<byte> SwitchToOriginalBuffer()  => "\x1b[?1049l"u8;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ReadOnlySpan<byte> ClearScreen()             => "\x1b[0m\x1b[2J\x1b[1;1H"u8;

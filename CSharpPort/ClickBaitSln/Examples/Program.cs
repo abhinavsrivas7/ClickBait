@@ -1,6 +1,3 @@
-﻿using ClickBait.Platform;
+﻿using ClickBait;
 
-unsafe
-{
-    Point<short>* x = stackalloc Point<short>[1];
-}
+EntryPoint.EventLoop();
