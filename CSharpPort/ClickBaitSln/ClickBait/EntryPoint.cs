@@ -1,5 +1,5 @@
 ﻿using ClickBait.Platform;
-using CONTEXT = ClickBait.Context.Context;
+using CONTEXT = ClickBait.Context;
 
 namespace ClickBait
 {
