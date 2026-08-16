@@ -38,11 +38,16 @@ namespace ClickBait.Platform
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly void DumpToConsole(ReadOnlySpan<byte> command) 
+        internal readonly void DumpToConsole(ReadOnlySpan<byte> command) => DumpToConsole(
+            (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(command)),
+            (uint)command.Length
+        );
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal readonly void DumpToConsole(byte* command, uint length)
         {
             Unsafe.SkipInit(out uint written);
-            var commandPtr = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(command));
-            WriteConsoleA(Out, commandPtr, (uint)command.Length, &written, null);
+            WriteConsoleA(Out, command, length, &written, null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
