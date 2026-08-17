@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ClickBait.Platform
+namespace ClickBait.Drawing
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Point<T> where T : unmanaged
@@ -14,5 +14,12 @@ namespace ClickBait.Platform
     {
         internal Point<T> TopLeft;
         internal Point<T> Dimensions;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public ref struct LineSegment
+    {
+        public Point<short> A;
+        public Point<short> B;
     };
 }

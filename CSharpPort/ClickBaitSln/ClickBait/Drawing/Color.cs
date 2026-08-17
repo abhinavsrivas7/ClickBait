@@ -1,20 +1,15 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace ClickBait.Color
+namespace ClickBait.Drawing
 {
     public enum Shade : byte
     {
-        Off = 0,
-        Faint = 1,
-        Light = 2,
-        Medium = 3,
-        Dark = 4,
-        Full = 5
+        Off = 0, Faint = 1, Light = 2, Medium = 3, Dark = 4, Full = 5
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Color
+    public struct Color
     {
         public byte R;
         public byte G;
@@ -24,8 +19,12 @@ namespace ClickBait.Color
         private const byte _channelSquare = ChannelSize * ChannelSize;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly byte GetColorPaletteIndex() => 
+            (byte)(R * _channelSquare + G * ChannelSize + B);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color FromShades(Shade r, Shade g, Shade b) => 
-            new() { R = (byte)r, G = (byte)g, B = (byte)b  };
+            new() { R = (byte)r, G = (byte)g, B = (byte)b };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color Black() => FromShades(Shade.Off, Shade.Off, Shade.Off);
@@ -41,10 +40,5 @@ namespace ClickBait.Color
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color Blue(Shade shade) => FromShades(Shade.Off, Shade.Off, shade);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public byte GetColorPaletteIndex() =>
-            (byte)(R * _channelSquare + G * ChannelSize + B);
-
     }
 }

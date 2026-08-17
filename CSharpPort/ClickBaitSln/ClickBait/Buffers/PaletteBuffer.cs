@@ -1,13 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using ClickBait.Drawing;
+using System.Runtime.InteropServices;
 using System.Text.Unicode;
 
-namespace ClickBait.Color
+namespace ClickBait.Buffers
 {
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct PaletteCache
+    public unsafe struct PaletteBuffer
     {
         internal int Size;
-
         internal fixed byte Cache[_cacheSize];
 
         private const int _cacheSize = 8192;
@@ -25,21 +25,22 @@ namespace ClickBait.Color
                 {
                     for (byte b = 0; b < Color.ChannelSize; b++, index++)
                     {
-                        bool success = Utf8.TryWrite(
+                        if (Utf8.TryWrite(
                             cacheSpan,
                             $"#{index};2;{r * _gamutSpread};{g * _gamutSpread};{b * _gamutSpread}",
                             out int written
-                        );
-
-                        if (success)
+                        ))
                         {
                             Size += written;
                             cacheSpan = cacheSpan.Slice(written);
                         }
+                        else
+                        {
+                            Environment.Exit(6969);
+                        }
                     }
                 }
             }
-            
         }
     }
 }

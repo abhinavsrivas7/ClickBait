@@ -1,5 +1,4 @@
 ﻿using ClickBait.Platform;
-using CONTEXT = ClickBait.Context;
 
 namespace ClickBait
 {
@@ -7,13 +6,13 @@ namespace ClickBait
     {
         public static int EventLoop()
         {
-            CONTEXT* context = CONTEXT.Startup();
+            Context* context = Context.Startup();
             Event @event = new();
 
             while (true)
             {
                 @event.PollForEvents(in context->Platform);
-                if (@event.EventType == EventTypes.EXIT_EVENT)
+                if (@event.EventType == EventTypes.Exit)
                 {
                     context->ShutDown();
                     break;
