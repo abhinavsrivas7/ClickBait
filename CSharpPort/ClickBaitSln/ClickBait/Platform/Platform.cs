@@ -19,11 +19,11 @@ namespace ClickBait.Platform
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void UpdateScreenSize() => ScreenSize.UpdateScreenSize(in this);
 
-        internal void InitForStartup()
+        internal void Init()
         {
             In = GetStdHandle(STD_HANDLE.STD_INPUT_HANDLE);
             Out = GetStdHandle(STD_HANDLE.STD_OUTPUT_HANDLE);
-            GetConsoleMode(In,  (CONSOLE_MODE*)Unsafe.AsPointer(ref InMode));
+            GetConsoleMode(In, (CONSOLE_MODE*)Unsafe.AsPointer(ref InMode));
             GetConsoleMode(Out, (CONSOLE_MODE*)Unsafe.AsPointer(ref OutMode));
             SwitchTerminalBuffer(true);
             ChangeIoModes(true);
@@ -31,7 +31,7 @@ namespace ClickBait.Platform
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly void RestoreForShutdown()
+        internal readonly void Shutdown()
         {
             ChangeIoModes(false);
             SwitchTerminalBuffer(false);

@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using ClickBait.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace ClickBait.Platform

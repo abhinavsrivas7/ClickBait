@@ -1,18 +1,19 @@
-﻿using System.Runtime.CompilerServices;
+﻿using ClickBait.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace ClickBait.Platform
 {
     public enum EventTypes : byte
     {
-        NO_EVENT                  = 0,
-        LEFT_MOUSE_CLICKED_EVENT  = 1,
-        RIGHT_MOUSE_CLICKED_EVENT = 2,
-        MOUSE_WHEELED_UP_EVENT    = 3,
-        MOUSE_WHEELED_DOWN_EVENT  = 4,
-        KEY_PRESSED_EVENT         = 5,
-        WINDOW_RESIZED_EVENT      = 6,
-        EXIT_EVENT                = 7
+        None              = 0,
+        LeftMouseClicked  = 1,
+        RightMouseClicked = 2,
+        MouseWheeledUp    = 3,
+        MouseWheeledDown  = 4,
+        KeyPressed        = 5,
+        WindowResized     = 6,
+        Exit              = 7
     };
 
     [StructLayout(LayoutKind.Explicit)]
@@ -38,8 +39,8 @@ namespace ClickBait.Platform
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly bool IsMouseClickedEvent() =>
-            (byte)EventType >= (byte)EventTypes.LEFT_MOUSE_CLICKED_EVENT &&
-            (byte)EventType <= (byte)EventTypes.RIGHT_MOUSE_CLICKED_EVENT;
+            (byte)EventType >= (byte)EventTypes.LeftMouseClicked &&
+            (byte)EventType <= (byte)EventTypes.RightMouseClicked;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsKeyDownEvent(in INPUT_RECORD record) =>
@@ -69,24 +70,24 @@ namespace ClickBait.Platform
 
             if (!ReadConsoleInput(platform.In, &@event, 1, &read))
             {
-                EventType = EventTypes.NO_EVENT;
+                EventType = EventTypes.None;
                 return;
             }
             if (@event.EventType == _windowBufferSizeEvent)
             {
-                EventType = EventTypes.WINDOW_RESIZED_EVENT;
+                EventType = EventTypes.WindowResized;
                 return;
             }
             if (IsKeyDownEvent(in @event))
             {
                 if (@event.Event.KeyEvent.uChar.AsciiChar == _quitCommand)
                 {
-                    EventType = EventTypes.EXIT_EVENT;
+                    EventType = EventTypes.Exit;
                     return;
                 }
                 else
                 {
-                    EventType = EventTypes.KEY_PRESSED_EVENT;
+                    EventType = EventTypes.KeyPressed;
                     EventData.Character = @event.Event.KeyEvent.uChar.AsciiChar;
                     return;
                 }
@@ -98,12 +99,12 @@ namespace ClickBait.Platform
 
                 if ((@event.Event.MouseEvent.dwButtonState & _leftMouseButton) != 0)
                 {
-                    EventType = EventTypes.LEFT_MOUSE_CLICKED_EVENT;
+                    EventType = EventTypes.LeftMouseClicked;
                     return;
                 }
                 if ((@event.Event.MouseEvent.dwButtonState & _rightMouseButton) != 0)
                 {
-                    EventType = EventTypes.RIGHT_MOUSE_CLICKED_EVENT;
+                    EventType = EventTypes.RightMouseClicked;
                     return;
                 }
                 if (@event.Event.MouseEvent.dwEventFlags == _mouseWheeled)
@@ -111,14 +112,14 @@ namespace ClickBait.Platform
                     short state = (short)HiWord(@event.Event.MouseEvent.dwButtonState);
                     
                     EventType = state > 0
-                        ? EventTypes.MOUSE_WHEELED_UP_EVENT
-                        : EventTypes.MOUSE_WHEELED_DOWN_EVENT;
+                        ? EventTypes.MouseWheeledUp
+                        : EventTypes.MouseWheeledDown;
 
                     return;
                 }
             }
 
-            EventType = EventTypes.NO_EVENT;
+            EventType = EventTypes.None;
             return;
         }
     };
