@@ -1,4 +1,6 @@
-﻿using ClickBait.Platform;
+﻿using ClickBait.Events;
+using CONTEXT = ClickBait.Context.Context;
+using PLATFORM = ClickBait.Platform.Platform;
 
 namespace ClickBait
 {
@@ -6,18 +8,20 @@ namespace ClickBait
     {
         public static int EventLoop()
         {
-            Context* context = Context.Startup();
-            Event @event = new();
+            CONTEXT* context = CONTEXT.Startup();
+            Event cbEvent = new();
 
             while (true)
             {
-                @event.PollForEvents(in context->Platform);
-                if (@event.EventType == EventTypes.Exit)
+                PLATFORM.PollForEvents(context, &cbEvent);
+
+                if (cbEvent.EventType == EventTypes.Exit)
                 {
-                    context->ShutDown();
+                    CONTEXT.ShutDown(context);
                     break;
                 }
             }
+            
             return 0;
         }
     }

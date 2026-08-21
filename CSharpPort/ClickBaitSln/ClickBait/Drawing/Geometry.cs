@@ -2,21 +2,21 @@
 
 namespace ClickBait.Drawing
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Point<T> where T : unmanaged
     {
         public T X;
         public T Y;
     };
     
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     internal ref struct AABB<T> where T : unmanaged
     {
         internal Point<T> TopLeft;
         internal Point<T> Dimensions;
     };
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     public ref struct LineSegment
     {
         public Point<short> A;
