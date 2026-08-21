@@ -1,11 +1,11 @@
-﻿using ClickBait.Drawing;
+﻿using CONTEXT = ClickBait.Context.Context;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
 
-namespace ClickBait.Buffers
+namespace ClickBait.Color
 {
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct PaletteBuffer
+    internal unsafe struct PaletteBuffer
     {
         internal int Size;
         internal fixed byte Cache[_cacheSize];
@@ -13,11 +13,11 @@ namespace ClickBait.Buffers
         private const int _cacheSize = 8192;
         private const byte _gamutSpread = 20; 
 
-        internal void Init()
+        internal static void Init(CONTEXT* context)
         {
-            Size = 0;
             byte index = 0;
-            Span<byte> cacheSpan = MemoryMarshal.CreateSpan(ref Cache[0], _cacheSize);
+            context->PaletteBuffer.Size = 0;
+            Span<byte> cacheSpan = new(&context->PaletteBuffer.Cache, _cacheSize);
 
             for(byte r = 0; r < Color.ChannelSize; r++)
             {
@@ -31,7 +31,7 @@ namespace ClickBait.Buffers
                             out int written
                         ))
                         {
-                            Size += written;
+                            context->PaletteBuffer.Size += written;
                             cacheSpan = cacheSpan.Slice(written);
                         }
                         else
