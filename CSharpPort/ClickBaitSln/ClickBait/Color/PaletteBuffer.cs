@@ -17,7 +17,7 @@ namespace ClickBait.Color
         {
             byte index = 0;
             context->PaletteBuffer.Size = 0;
-            Span<byte> cacheSpan = new(&context->PaletteBuffer.Cache, _cacheSize);
+            Span<byte> cacheSpan = new(context->PaletteBuffer.Cache, _cacheSize);
 
             for(byte r = 0; r < Color.ChannelSize; r++)
             {

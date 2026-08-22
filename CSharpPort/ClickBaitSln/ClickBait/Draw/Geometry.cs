@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ClickBait.Drawing
+namespace ClickBait.Draw
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Point<T> where T : unmanaged

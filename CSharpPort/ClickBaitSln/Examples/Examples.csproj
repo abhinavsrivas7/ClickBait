@@ -10,6 +10,8 @@
 	<LangVersion>14</LangVersion>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	<OptimizationPreference>Speed</OptimizationPreference>
+	<IlcInstructionSet>x86-64-v3</IlcInstructionSet>
   </PropertyGroup>
 
   <ItemGroup>

@@ -9,7 +9,6 @@
 	  <LangVersion>14</LangVersion>
 	  <IsAotCompatible>true</IsAotCompatible>
 	  <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-	  <OptimizationPreference>Speed</OptimizationPreference>
   </PropertyGroup>
 
   <ItemGroup>
