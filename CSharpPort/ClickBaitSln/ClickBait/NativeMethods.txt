@@ -1,5 +1,4 @@
 INPUT_RECORD
-WriteConsoleA
 GetConsoleCursorInfo
 SetConsoleCursorInfo
 GetNumberOfConsoleInputEvents
